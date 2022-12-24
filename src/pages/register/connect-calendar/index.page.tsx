@@ -13,9 +13,9 @@ export default function ConnectCalendar() {
     const hasError = !!router.query.error
     const isSignedIn = session.status === 'authenticated'
 
-    // async function handleRegister(data: any) {
-
-    // }
+    async function handleConnectCalendar() {
+        await signIn('google')
+    }
 
     return (
         <RegisterContainer>
@@ -45,7 +45,7 @@ export default function ConnectCalendar() {
                             <Button
                                 variant={'secondary'}
                                 size="sm"
-                                onClick={() => signIn('google')}
+                                onClick={handleConnectCalendar}
                             >
                                 Conectar
 
