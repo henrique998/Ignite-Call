@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { NextApiRequest, NextApiResponse } from "next";
 import { setCookie } from "nookies";
 import { prisma } from "../../../libs/prisma";
