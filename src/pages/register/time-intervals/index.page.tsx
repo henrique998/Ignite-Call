@@ -1,4 +1,6 @@
 /* eslint-disable prettier/prettier */
+import { useRouter } from "next/router";
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Checkbox, Heading, MultiStep, Text, TextInput } from '@ignite-ui/react'
 import { ArrowRight } from 'phosphor-react'
@@ -66,12 +68,14 @@ export default function TimeIntervals() {
     }
   })
 
-  const weekDays = getWeekDays()
+  const weekDays = getWeekDays({ short: false })
 
   const { fields } = useFieldArray({
     control,
     name: 'intervals'
   })
+
+  const router = useRouter()
 
   async function handleSetTimeIntervals(data: any) {
     const { intervals } = data as TimeIntervalsFormOutput
@@ -79,6 +83,8 @@ export default function TimeIntervals() {
     await api.post('/users/time-intervals', {
       intervals
     })
+
+    await router.push('/register/update-profile')
   }
 
   const intervals = watch('intervals')

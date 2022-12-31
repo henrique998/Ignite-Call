@@ -1,10 +1,13 @@
 /* eslint-disable prettier/prettier */
-import { NextApiRequest, NextApiResponse } from "next"
+import { NextApiRequest, NextApiResponse, NextPageContext } from "next"
 import { Adapter } from "next-auth/adapters"
 import { destroyCookie, parseCookies } from "nookies"
 import { prisma } from "../prisma"
 
-export function PrismaAdapter(req: NextApiRequest, res: NextApiResponse): Adapter {
+export function PrismaAdapter(
+  req: NextApiRequest | NextPageContext['req'],
+  res: NextApiResponse | NextPageContext['res']
+): Adapter {
   return {
     async createUser(user) {
       const { '@ignitecall:userId': userIdOnCookies } = parseCookies({ req })
@@ -222,6 +225,6 @@ export function PrismaAdapter(req: NextApiRequest, res: NextApiResponse): Adapte
           session_token: sessionToken
         }
       })
-    } 
+    }
   }
 }

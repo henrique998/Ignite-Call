@@ -1,10 +1,13 @@
 /* eslint-disable prettier/prettier */
-import { NextApiRequest, NextApiResponse } from 'next'
+import { NextApiRequest, NextApiResponse, NextPageContext } from 'next'
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google'
 import { PrismaAdapter } from '../../../libs/auth/prisma-adapter'
 
-export function buildNextAuthOptions(req: NextApiRequest, res: NextApiResponse): NextAuthOptions {
+export function buildNextAuthOptions(
+  req: NextApiRequest | NextPageContext['req'],
+  res: NextApiResponse | NextPageContext['res']
+): NextAuthOptions {
   return {
     adapter: PrismaAdapter(req, res),
 
@@ -13,10 +16,10 @@ export function buildNextAuthOptions(req: NextApiRequest, res: NextApiResponse):
         clientId: process.env.GOOGLE_CLIENT_ID ?? '',
         clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
         authorization: {
-            params: {
+          params: {
             scope:
-                'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar',
-            },
+              'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar',
+          },
         },
         profile(profileData: GoogleProfile) {
           return {
@@ -33,9 +36,9 @@ export function buildNextAuthOptions(req: NextApiRequest, res: NextApiResponse):
     callbacks: {
       async signIn({ account }) {
         if (
-            !account?.scope?.includes('https://www.googleapis.com/auth/calendar')
+          !account?.scope?.includes('https://www.googleapis.com/auth/calendar')
         ) {
-            return '/register/connect-calendar?error=permissions'
+          return '/register/connect-calendar?error=permissions'
         }
 
         return true
